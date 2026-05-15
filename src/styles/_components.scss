@@ -1,0 +1,63 @@
+@use 'variables' as *;
+
+// Shared page section header
+.page-head {
+  padding: 4rem 0 2.5rem;
+
+  > h2 {
+    font-family: $font-heading;
+    font-weight: 800;
+    font-size: 2.2rem;
+    letter-spacing: -0.03em;
+    margin-bottom: 0.4rem;
+  }
+
+  > p {
+    color: $muted;
+    font-size: 0.8rem;
+  }
+}
+
+// Tag pill — used in project cards and game cards
+.ptag {
+  font-size: 0.6rem;
+  padding: 0.18rem 0.45rem;
+  background: $bg3;
+  border: 1px solid $border;
+  color: $muted;
+  border-radius: $radius-sm;
+}
+
+// Tag row wrapper
+.ptags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+}
+
+// Subtle text link with underline on hover
+.card-link {
+  display: inline-block;
+  margin-top: 0.9rem;
+  font-size: 0.72rem;
+  color: $accent;
+  text-decoration: none;
+
+  &:hover { text-decoration: underline; }
+}
+
+// Bordered button-style link (e.g. accordion detail links)
+.detail-link {
+  font-size: 0.72rem;
+  color: $accent;
+  text-decoration: none;
+  border: 1px solid rgba(155, 93, 229, 0.3);
+  padding: 0.28rem 0.65rem;
+  border-radius: $radius-sm;
+  transition: all 0.2s;
+
+  &:hover {
+    background: $glow;
+    border-color: $accent;
+  }
+}

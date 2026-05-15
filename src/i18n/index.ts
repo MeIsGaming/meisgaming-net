@@ -18,14 +18,9 @@ const translations = {
     p3: 'Top-down 2D survivor game inspired by Brotato & BoI. Java/libGDX. Very early. The first enemies are cats. Obviously.',
     p4: 'Open-source browser extension for AI slop detection and illegal content reporting. Plasmo/TypeScript. Concept stage.',
 
-    games_h:   'Games',
-    games_sub: 'A rotating obsession.',
-
-    xiv_h:    'Warrior of Light',
-    xiv_sub:  'Free Trial. Forever. No regrets.',
-    xiv_main: '♥ MAIN',
-    xiv_wip:  'in progress...',
-    xiv_note: "Playing on EU servers. If you spot a Red Mage dramatically casting Verraise on the entire party, that's probably me.",
+    games_h:      'Games',
+    games_sub:    'A rotating obsession.',
+    click_hint:   'click for details',
 
     footer_copy: '© 2026 MeIsGaming · Weiden, Bavaria',
   },
@@ -44,14 +39,9 @@ const translations = {
     p3: 'Top-Down 2D Survivorgame inspiriert von Brotato & BoI. Java/libGDX. Sehr früh. Die ersten Gegner sind Katzen. Natürlich.',
     p4: 'Open-Source Browser-Extension zur KI-Slop-Erkennung und Meldung illegaler Inhalte. Plasmo/TypeScript. Konzeptphase.',
 
-    games_h:   'Games',
-    games_sub: 'Rotierende Obsessionen.',
-
-    xiv_h:    'Kriegerin des Lichts',
-    xiv_sub:  'Free Trial. Für immer. Keine Reue.',
-    xiv_main: '♥ MAIN',
-    xiv_wip:  'in Arbeit...',
-    xiv_note: 'Spiele auf EU-Servern. Wer eine Red Mage sieht die dramatisch Verraise auf die gesamte Gruppe castet, das bin wahrscheinlich ich.',
+    games_h:      'Games',
+    games_sub:    'Rotierende Obsessionen.',
+    click_hint:   'Klick für Details',
 
     footer_copy: '© 2026 MeIsGaming · Weiden, Bayern',
   },

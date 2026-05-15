@@ -1,10 +1,18 @@
 <script setup lang="ts">
 import { useI18n } from '@/i18n'
+
 const { t } = useI18n()
 
 const chips = ['Arch Linux', 'Self-hosted', 'FFXIV', 'IT Services', 'sie/ihr', 'Weiden, DE']
 
-const socials = [
+interface Social {
+  name: string
+  href: string
+  svg: string
+  svgStroke?: boolean
+}
+
+const socials: Social[] = [
   {
     name: 'Discord',
     href: 'https://discord.com/users/871497360658800640',
@@ -50,9 +58,9 @@ const socials = [
 </script>
 
 <template>
-  <div class="home">
+  <div class="view">
     <div class="hero">
-      <div>
+      <div class="hero-text">
         <p class="hero-label">{{ t('hero_label') }}</p>
         <h1>MeIs<em>Gaming</em></h1>
         <p class="bio">{{ t('hero_bio') }}</p>
@@ -68,7 +76,12 @@ const socials = [
             target="_blank"
             rel="noopener"
           >
-            <svg viewBox="0 0 24 24" :fill="s.svgStroke ? 'none' : 'currentColor'" :stroke="s.svgStroke ? 'currentColor' : undefined" :stroke-width="s.svgStroke ? '1.5' : undefined">
+            <svg
+              viewBox="0 0 24 24"
+              :fill="s.svgStroke ? 'none' : 'currentColor'"
+              :stroke="s.svgStroke ? 'currentColor' : undefined"
+              :stroke-width="s.svgStroke ? '1.5' : undefined"
+            >
               <path v-if="!s.svgStroke" :d="s.svg" />
               <polygon v-else :points="s.svg" />
             </svg>
@@ -76,6 +89,7 @@ const socials = [
           </a>
         </div>
       </div>
+
       <div class="avatar-wrap">
         <div class="avatar">
           <div class="avatar-inner">
@@ -89,10 +103,6 @@ const socials = [
 </template>
 
 <style lang="scss" scoped>
-.home {
-  padding-bottom: 4rem;
-}
-
 .hero {
   padding: 5rem 0 3rem;
   display: grid;
@@ -122,10 +132,7 @@ h1 {
   letter-spacing: -0.03em;
   margin-bottom: 1.5rem;
 
-  em {
-    font-style: normal;
-    color: $accent;
-  }
+  em { font-style: normal; color: $accent; }
 }
 
 .bio {
@@ -157,9 +164,7 @@ h1 {
   align-items: center;
   justify-content: center;
 
-  @media (max-width: 640px) {
-    display: none;
-  }
+  @media (max-width: 640px) { display: none; }
 }
 
 .avatar {

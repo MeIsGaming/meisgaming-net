@@ -17,7 +17,7 @@ function desc(game: GameEntry) {
 </script>
 
 <template>
-  <div class="games-view">
+  <div class="view">
     <div class="page-head">
       <h2>{{ t('games_h') }}</h2>
       <p>{{ t('games_sub') }}</p>
@@ -76,6 +76,8 @@ function desc(game: GameEntry) {
                 </div>
               </div>
             </Transition>
+
+            <span v-if="openGame !== game.name" class="card-hint">{{ t('click_hint') }}</span>
           </div>
         </div>
       </section>
@@ -84,24 +86,6 @@ function desc(game: GameEntry) {
 </template>
 
 <style lang="scss" scoped>
-.games-view {
-  padding-bottom: 4rem;
-}
-
-.page-head {
-  padding: 4rem 0 2.5rem;
-
-  h2 {
-    font-family: $font-heading;
-    font-weight: 800;
-    font-size: 2.2rem;
-    letter-spacing: -0.03em;
-    margin-bottom: 0.4rem;
-  }
-
-  p { color: $muted; font-size: 0.8rem; }
-}
-
 .genres {
   display: flex;
   flex-direction: column;
@@ -138,29 +122,15 @@ function desc(game: GameEntry) {
 }
 
 .card {
+  @include card-hover(0);
   background: $bg2;
   border: 1px solid $border;
   border-radius: $radius-lg;
-  overflow: hidden;
   cursor: pointer;
   transition: border-color 0.25s;
-  position: relative;
 
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, $accent, $accent2);
-    opacity: 0;
-    transition: opacity 0.25s;
-  }
-
-  &:hover,
-  &.open {
-    border-color: rgba(155, 93, 229, 0.35);
-    &::before { opacity: 1; }
-  }
+  &.open { border-color: rgba(155, 93, 229, 0.35); }
+  &.open::before { opacity: 1; }
 }
 
 .card-summary {
@@ -175,7 +145,6 @@ function desc(game: GameEntry) {
   display: flex;
   align-items: center;
   gap: 0.65rem;
-  min-width: 0;
 }
 
 .card-emoji { font-size: 1.2rem; flex-shrink: 0; }
@@ -212,27 +181,16 @@ function desc(game: GameEntry) {
   .open & { color: $accent; }
 }
 
-.ptag {
+.card-hint {
+  display: block;
   font-size: 0.6rem;
-  padding: 0.15rem 0.4rem;
-  background: $bg3;
-  border: 1px solid $border;
   color: $muted;
-  border-radius: $radius-sm;
-}
-
-// Expand transition
-.expand-enter-active,
-.expand-leave-active {
-  transition: max-height 0.3s ease, opacity 0.25s ease;
-  overflow: hidden;
-  max-height: 600px;
-}
-
-.expand-enter-from,
-.expand-leave-to {
-  max-height: 0;
+  letter-spacing: 0.06em;
+  padding: 0 1.2rem 0.65rem;
   opacity: 0;
+  transition: opacity $transition;
+
+  .card:hover & { opacity: 1; }
 }
 
 .card-detail {
@@ -269,12 +227,13 @@ function desc(game: GameEntry) {
   }
 }
 
-.job-emoji { font-size: 1.3rem; margin-bottom: 0.3rem; }
-.job-name  { font-size: 0.78rem; font-weight: 500; }
+.job-emoji  { font-size: 1.3rem; margin-bottom: 0.3rem; }
+.job-name   { font-size: 0.78rem; font-weight: 500; }
 .job-status {
   font-size: 0.58rem;
   margin-top: 0.2rem;
   letter-spacing: 0.1em;
+  color: $muted;
 
   .main & { color: $accent; }
 }
@@ -283,20 +242,5 @@ function desc(game: GameEntry) {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-}
-
-.detail-link {
-  font-size: 0.72rem;
-  color: $accent;
-  text-decoration: none;
-  border: 1px solid rgba(155, 93, 229, 0.3);
-  padding: 0.28rem 0.65rem;
-  border-radius: $radius-sm;
-  transition: all 0.2s;
-
-  &:hover {
-    background: $glow;
-    border-color: $accent;
-  }
 }
 </style>

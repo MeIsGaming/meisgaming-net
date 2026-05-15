@@ -1,0 +1,40 @@
+@use 'variables' as *;
+
+:root {
+  --bg:      #{$bg};
+  --bg2:     #{$bg2};
+  --bg3:     #{$bg3};
+  --border:  #{$border};
+  --text:    #{$text};
+  --muted:   #{$muted};
+  --accent:  #{$accent};
+  --accent2: #{$accent2};
+  --glow:    #{$glow};
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: $font-mono;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 2.5rem;
+
+  @media (max-width: 640px) {
+    padding: 0 1.25rem;
+  }
+}
+
+.view {
+  padding-bottom: 4rem;
+}

@@ -27,15 +27,3 @@ const currentView = computed(() => {
   </main>
   <AppFooter />
 </template>
-
-<style lang="scss">
-main {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 0 2.5rem;
-
-  @media (max-width: 640px) {
-    padding: 0 1.25rem;
-  }
-}
-</style>

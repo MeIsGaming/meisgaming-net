@@ -1,0 +1,26 @@
+@use 'variables' as *;
+
+// Gradient top-border + hover lift — used on all card types
+@mixin card-hover($lift: -3px) {
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, $accent, $accent2);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+
+  &:hover {
+    border-color: rgba(155, 93, 229, 0.35);
+    @if $lift != 0 { transform: translateY($lift); }
+
+    &::before { opacity: 1; }
+  }
+}
