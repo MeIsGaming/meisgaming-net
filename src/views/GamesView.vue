@@ -1,92 +1,15 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from '@/i18n'
-import FFXIVSection from '@/components/games/FFXIVSection.vue'
+import { genres, type GameEntry } from '@/data/games'
+import GameModal from '@/components/games/GameModal.vue'
 
 const { t } = useI18n()
 
-interface Game {
-  name: string
-  emoji: string
-  tags: string[]
-  link?: string
-  linkLabel?: string
-  featured?: boolean
-}
+const activeGame = ref<GameEntry | null>(null)
 
-interface Genre {
-  label: string
-  games: Game[]
-}
-
-const genres: Genre[] = [
-  {
-    label: 'MMO / RPG',
-    games: [
-      {
-        name: 'Final Fantasy XIV',
-        emoji: '⚔️',
-        tags: ['EU', 'Free Trial', 'Red Mage', 'Dark Knight'],
-        link: 'https://eu.finalfantasyxiv.com/lodestone/',
-        linkLabel: '→ Lodestone',
-        featured: true,
-      },
-    ],
-  },
-  {
-    label: 'Roguelike',
-    games: [
-      {
-        name: 'The Binding of Isaac',
-        emoji: '💀',
-        tags: ['Repentance', 'countless hours', 'RIP'],
-      },
-      {
-        name: 'Dome Keeper',
-        emoji: '⛏️',
-        tags: ['mining', 'cozy panic'],
-      },
-    ],
-  },
-  {
-    label: 'Puzzle / Strategy',
-    games: [
-      {
-        name: 'Creeper World 4',
-        emoji: '🌊',
-        tags: ['tower defense', 'real-time', 'brain hurt'],
-      },
-      {
-        name: 'Upload Labs',
-        emoji: '🔌',
-        tags: ['node-based', 'optimization', 'Very Positive'],
-        link: 'https://store.steampowered.com/app/3606890/Upload_Labs/',
-        linkLabel: '→ Steam',
-      },
-    ],
-  },
-  {
-    label: 'Simulation',
-    games: [
-      {
-        name: 'Euro Truck Simulator 2',
-        emoji: '🚛',
-        tags: ['ETS2', 'chill', 'EU roads'],
-      },
-    ],
-  },
-  {
-    label: 'Sandbox',
-    games: [
-      {
-        name: 'Minecraft',
-        emoji: '🪨',
-        tags: ['Java Edition', 'survival'],
-        link: 'https://namemc.com/profile/MeIsGaming',
-        linkLabel: '→ NameMC',
-      },
-    ],
-  },
-]
+function open(game: GameEntry) { activeGame.value = game }
+function close() { activeGame.value = null }
 </script>
 
 <template>
@@ -100,24 +23,26 @@ const genres: Genre[] = [
       <section v-for="genre in genres" :key="genre.label" class="genre-section">
         <div class="genre-label">{{ genre.label }}</div>
         <div class="cards">
-          <template v-for="game in genre.games" :key="game.name">
-            <div class="card" :class="{ featured: game.featured }">
-              <div class="card-top">
-                <span class="card-emoji">{{ game.emoji }}</span>
-                <div class="card-tags">
-                  <span v-for="tag in game.tags" :key="tag" class="ptag">{{ tag }}</span>
-                </div>
+          <button
+            v-for="game in genre.games"
+            :key="game.name"
+            class="card"
+            @click="open(game)"
+          >
+            <div class="card-top">
+              <span class="card-emoji">{{ game.emoji }}</span>
+              <div class="card-tags">
+                <span v-for="tag in game.tags" :key="tag" class="ptag">{{ tag }}</span>
               </div>
-              <div class="card-name">{{ game.name }}</div>
-              <a v-if="game.link" :href="game.link" class="card-link" target="_blank" rel="noopener">
-                {{ game.linkLabel }}
-              </a>
             </div>
-            <FFXIVSection v-if="game.featured" class="ffxiv-inline" />
-          </template>
+            <div class="card-name">{{ game.name }}</div>
+            <span class="card-hint">click for details</span>
+          </button>
         </div>
       </section>
     </div>
+
+    <GameModal :game="activeGame" @close="close" />
   </div>
 </template>
 
@@ -180,9 +105,14 @@ const genres: Genre[] = [
   border: 1px solid $border;
   border-radius: $radius-lg;
   padding: 1.1rem 1.2rem;
-  transition: all 0.25s;
+  cursor: pointer;
+  text-align: left;
+  font-family: $font-mono;
+  color: $text;
+  width: 100%;
   position: relative;
   overflow: hidden;
+  transition: all 0.25s;
 
   &::before {
     content: '';
@@ -198,17 +128,9 @@ const genres: Genre[] = [
     border-color: rgba(155, 93, 229, 0.35);
     transform: translateY(-2px);
     &::before { opacity: 1; }
-  }
 
-  &.featured {
-    grid-column: 1 / -1;
-    border-color: rgba(155, 93, 229, 0.3);
-    background: rgba(155, 93, 229, 0.04);
+    .card-hint { opacity: 1; }
   }
-}
-
-.ffxiv-inline {
-  grid-column: 1 / -1;
 }
 
 .card-top {
@@ -235,7 +157,15 @@ const genres: Genre[] = [
   font-family: $font-heading;
   font-weight: 700;
   font-size: 0.92rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.4rem;
+}
+
+.card-hint {
+  font-size: 0.6rem;
+  color: $muted;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  transition: opacity $transition;
 }
 
 .ptag {
@@ -245,13 +175,5 @@ const genres: Genre[] = [
   border: 1px solid $border;
   color: $muted;
   border-radius: $radius-sm;
-}
-
-.card-link {
-  font-size: 0.7rem;
-  color: $accent;
-  text-decoration: none;
-
-  &:hover { text-decoration: underline; }
 }
 </style>
