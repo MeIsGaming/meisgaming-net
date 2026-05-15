@@ -1,0 +1,19 @@
+// Design tokens — available globally via vite.config additionalData
+$bg:      #07070e;
+$bg2:     #0c0c1a;
+$bg3:     #111126;
+$border:  #1a1a30;
+$text:    #dde0f0;
+$muted:   #6a6a90;
+$accent:  #9b5de5;
+$accent2: #f72585;
+$glow:    rgba(155, 93, 229, 0.12);
+
+$font-heading: 'Syne', sans-serif;
+$font-mono:    'IBM Plex Mono', monospace;
+
+$radius-sm: 3px;
+$radius-md: 6px;
+$radius-lg: 8px;
+
+$transition: 0.2s ease;

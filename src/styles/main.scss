@@ -1,0 +1,50 @@
+@use 'variables' as *;
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg:      #{$bg};
+  --bg2:     #{$bg2};
+  --bg3:     #{$bg3};
+  --border:  #{$border};
+  --text:    #{$text};
+  --muted:   #{$muted};
+  --accent:  #{$accent};
+  --accent2: #{$accent2};
+  --glow:    #{$glow};
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: $font-mono;
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: 1.6;
+}
+
+// Shared tab fade animation
+.tab-fade-enter-active,
+.tab-fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.25s ease;
+}
+
+.tab-fade-enter-from {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.tab-fade-leave-to {
+  opacity: 0;
+  transform: translateY(-4px);
+}
