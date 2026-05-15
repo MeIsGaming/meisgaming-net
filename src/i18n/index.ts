@@ -7,7 +7,6 @@ const translations = {
     nav_home:     'home',
     nav_projects: 'projects',
     nav_games:    'games',
-    nav_ffxiv:    'ffxiv',
 
     hero_label: '// freelance IT · gamer · self-hoster',
     hero_bio:   "IT freelancer based in Weiden, Bavaria. Self-taught since childhood, running MeIsGaming since 2022. Into Linux, FFXIV, anime, and building things that probably shouldn't be built.",
@@ -20,7 +19,7 @@ const translations = {
     p4: 'Open-source browser extension for AI slop detection and illegal content reporting. Plasmo/TypeScript. Concept stage.',
 
     games_h:   'Games',
-    games_sub: 'Currently obsessed with.',
+    games_sub: 'A rotating obsession.',
 
     xiv_h:    'Warrior of Light',
     xiv_sub:  'Free Trial. Forever. No regrets.',
@@ -34,7 +33,6 @@ const translations = {
     nav_home:     'start',
     nav_projects: 'projekte',
     nav_games:    'games',
-    nav_ffxiv:    'ffxiv',
 
     hero_label: '// Freelance IT · Gamerin · Self-Hosterin',
     hero_bio:   'IT-Freelancerin aus Weiden in der Oberpfalz. Seit Kindheit selbst beigebracht, MeIsGaming seit 2022. Linux, FFXIV, Anime, und Dinge bauen die vielleicht nicht gebaut werden sollten.',
@@ -47,7 +45,7 @@ const translations = {
     p4: 'Open-Source Browser-Extension zur KI-Slop-Erkennung und Meldung illegaler Inhalte. Plasmo/TypeScript. Konzeptphase.',
 
     games_h:   'Games',
-    games_sub: 'Aktuell besessen von.',
+    games_sub: 'Rotierende Obsessionen.',
 
     xiv_h:    'Kriegerin des Lichts',
     xiv_sub:  'Free Trial. Für immer. Keine Reue.',
