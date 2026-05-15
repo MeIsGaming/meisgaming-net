@@ -2,14 +2,18 @@
 import { ref } from 'vue'
 import { useI18n } from '@/i18n'
 import { genres, type GameEntry } from '@/data/games'
-import GameModal from '@/components/games/GameModal.vue'
 
-const { t } = useI18n()
+const { t, lang } = useI18n()
 
-const activeGame = ref<GameEntry | null>(null)
+const openGame = ref<string | null>(null)
 
-function open(game: GameEntry) { activeGame.value = game }
-function close() { activeGame.value = null }
+function toggle(game: GameEntry) {
+  openGame.value = openGame.value === game.name ? null : game.name
+}
+
+function desc(game: GameEntry) {
+  return lang.lang === 'de' && game.descriptionDe ? game.descriptionDe : game.description
+}
 </script>
 
 <template>
@@ -23,26 +27,59 @@ function close() { activeGame.value = null }
       <section v-for="genre in genres" :key="genre.label" class="genre-section">
         <div class="genre-label">{{ genre.label }}</div>
         <div class="cards">
-          <button
+          <div
             v-for="game in genre.games"
             :key="game.name"
             class="card"
-            @click="open(game)"
+            :class="{ open: openGame === game.name }"
+            @click="toggle(game)"
           >
-            <div class="card-top">
-              <span class="card-emoji">{{ game.emoji }}</span>
-              <div class="card-tags">
-                <span v-for="tag in game.tags" :key="tag" class="ptag">{{ tag }}</span>
+            <div class="card-summary">
+              <div class="card-left">
+                <span class="card-emoji">{{ game.emoji }}</span>
+                <span class="card-name">{{ game.name }}</span>
+              </div>
+              <div class="card-right">
+                <div class="card-tags">
+                  <span v-for="tag in game.tags" :key="tag" class="ptag">{{ tag }}</span>
+                </div>
+                <span class="chevron">{{ openGame === game.name ? '▲' : '▼' }}</span>
               </div>
             </div>
-            <div class="card-name">{{ game.name }}</div>
-            <span class="card-hint">click for details</span>
-          </button>
+
+            <Transition name="expand">
+              <div v-if="openGame === game.name" class="card-detail" @click.stop>
+                <p v-if="desc(game)" class="detail-desc">{{ desc(game) }}</p>
+
+                <div v-if="game.jobs" class="jobs">
+                  <div
+                    v-for="job in game.jobs"
+                    :key="job.name"
+                    class="job"
+                    :class="{ main: job.main }"
+                  >
+                    <div class="job-emoji">{{ job.emoji }}</div>
+                    <div class="job-name">{{ job.name }}</div>
+                    <div class="job-status">{{ job.status }}</div>
+                  </div>
+                </div>
+
+                <div v-if="game.links?.length" class="detail-links">
+                  <a
+                    v-for="link in game.links"
+                    :key="link.href"
+                    :href="link.href"
+                    class="detail-link"
+                    target="_blank"
+                    rel="noopener"
+                  >{{ link.label }}</a>
+                </div>
+              </div>
+            </Transition>
+          </div>
         </div>
       </section>
     </div>
-
-    <GameModal :game="activeGame" @close="close" />
   </div>
 </template>
 
@@ -95,24 +132,19 @@ function close() { activeGame.value = null }
 }
 
 .cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .card {
   background: $bg2;
   border: 1px solid $border;
   border-radius: $radius-lg;
-  padding: 1.1rem 1.2rem;
-  cursor: pointer;
-  text-align: left;
-  font-family: $font-mono;
-  color: $text;
-  width: 100%;
-  position: relative;
   overflow: hidden;
-  transition: all 0.25s;
+  cursor: pointer;
+  transition: border-color 0.25s;
+  position: relative;
 
   &::before {
     content: '';
@@ -124,26 +156,42 @@ function close() { activeGame.value = null }
     transition: opacity 0.25s;
   }
 
-  &:hover {
+  &:hover,
+  &.open {
     border-color: rgba(155, 93, 229, 0.35);
-    transform: translateY(-2px);
     &::before { opacity: 1; }
-
-    .card-hint { opacity: 1; }
   }
 }
 
-.card-top {
+.card-summary {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
-  margin-bottom: 0.6rem;
+  gap: 1rem;
+  padding: 0.9rem 1.2rem;
 }
 
-.card-emoji {
-  font-size: 1.3rem;
-  line-height: 1;
+.card-left {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.card-emoji { font-size: 1.2rem; flex-shrink: 0; }
+
+.card-name {
+  font-family: $font-heading;
+  font-weight: 700;
+  font-size: 0.92rem;
+  white-space: nowrap;
+}
+
+.card-right {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
 }
 
 .card-tags {
@@ -151,21 +199,17 @@ function close() { activeGame.value = null }
   flex-wrap: wrap;
   gap: 0.3rem;
   justify-content: flex-end;
+
+  @media (max-width: 500px) { display: none; }
 }
 
-.card-name {
-  font-family: $font-heading;
-  font-weight: 700;
-  font-size: 0.92rem;
-  margin-bottom: 0.4rem;
-}
-
-.card-hint {
-  font-size: 0.6rem;
+.chevron {
+  font-size: 0.55rem;
   color: $muted;
-  letter-spacing: 0.06em;
-  opacity: 0;
-  transition: opacity $transition;
+  transition: color 0.2s;
+
+  .card:hover &,
+  .open & { color: $accent; }
 }
 
 .ptag {
@@ -175,5 +219,84 @@ function close() { activeGame.value = null }
   border: 1px solid $border;
   color: $muted;
   border-radius: $radius-sm;
+}
+
+// Expand transition
+.expand-enter-active,
+.expand-leave-active {
+  transition: max-height 0.3s ease, opacity 0.25s ease;
+  overflow: hidden;
+  max-height: 600px;
+}
+
+.expand-enter-from,
+.expand-leave-to {
+  max-height: 0;
+  opacity: 0;
+}
+
+.card-detail {
+  padding: 0 1.2rem 1.1rem;
+  border-top: 1px solid $border;
+  cursor: default;
+}
+
+.detail-desc {
+  font-size: 0.8rem;
+  color: $muted;
+  line-height: 1.8;
+  padding-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.jobs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.job {
+  background: $bg3;
+  border: 1px solid $border;
+  border-radius: $radius-md;
+  padding: 0.8rem;
+  text-align: center;
+
+  &.main {
+    border-color: rgba(155, 93, 229, 0.35);
+    background: rgba(155, 93, 229, 0.06);
+  }
+}
+
+.job-emoji { font-size: 1.3rem; margin-bottom: 0.3rem; }
+.job-name  { font-size: 0.78rem; font-weight: 500; }
+.job-status {
+  font-size: 0.58rem;
+  margin-top: 0.2rem;
+  letter-spacing: 0.1em;
+
+  .main & { color: $accent; }
+}
+
+.detail-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.detail-link {
+  font-size: 0.72rem;
+  color: $accent;
+  text-decoration: none;
+  border: 1px solid rgba(155, 93, 229, 0.3);
+  padding: 0.28rem 0.65rem;
+  border-radius: $radius-sm;
+  transition: all 0.2s;
+
+  &:hover {
+    background: $glow;
+    border-color: $accent;
+  }
 }
 </style>
